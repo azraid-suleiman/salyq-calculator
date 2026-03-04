@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Транспортный налог - Salyq Calc</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" stroke="#1a1a1a" stroke-width="2"/>
+                        <path d="M20 8 L28 15 L25 25 L15 25 L12 15 Z" fill="#e8dcc4" stroke="#1a1a1a" stroke-width="1.5"/>
+                        <circle cx="20" cy="20" r="3" fill="#1a1a1a"/>
+                    </svg>
+                    <span>Salyq Calc</span>
+                </div>
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="ru">РУ</button>
+                    <button class="lang-btn" data-lang="kk">ҚАЗ</button>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" data-i18n="nav.home">Главная</a>
+                    <a href="transport.html" class="active" data-i18n="nav.transport">Транспорт</a>
+                    <a href="property.html" data-i18n="nav.property">Имущество</a>
+                    <a href="land.html" data-i18n="nav.land">Земля</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="calculator-page">
+        <div class="container">
+            <div class="page-header">
+                <h1 data-i18n="transport.title">Калькулятор транспортного налога</h1>
+                <p data-i18n="transport.subtitle">Рассчитайте транспортный налог согласно ст. 492 Налогового кодекса РК</p>
+            </div>
+
+            <div class="calculator-wrapper">
+                <div class="calculator-form">
+                    <div class="transport-form-header">
+                        <h3 data-i18n="transport.formTitle">Расчет налога на транспорт</h3>
+                    </div>
+                    <form id="transportForm">
+
+                        <!-- ── Год исчисления ── -->
+                        <div class="form-group">
+                            <label data-i18n="form.taxYear">Год исчисления налога</label>
+                            <select id="taxYear" required>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026" selected>2026</option>
+                            </select>
+                        </div>
+
+                        <!-- ── Кол-во месяцев ── -->
+                        <div class="form-group">
+                            <label data-i18n="form.taxMonths">Количество месяцев в году исчисления</label>
+                            <select id="taxMonths" required>
+                                <option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option>
+                                <option value="9">9</option><option value="10">10</option>
+                                <option value="11">11</option><option value="12" selected>12</option>
+                            </select>
+                        </div>
+
+                        <!-- ── Вид объекта ── -->
+                        <div class="form-group">
+                            <label data-i18n="form.objectType">Вид объекта налогообложения</label>
+                            <select id="vehicleType" required>
+                                <option value="" data-i18n="form.objectType.default">— Выберите тип —</option>
+                                <option value="passenger" data-i18n="form.objectType.passenger">Легковой автотранспорт</option>
+                                <option value="truck"     data-i18n="form.objectType.truck">Грузовой автотранспорт</option>
+                                <option value="bus"       data-i18n="form.objectType.bus">Автобусы</option>
+                                <option value="motorcycle" data-i18n="form.objectType.motorcycle">Мотоциклы и мопеды</option>
+                                <option value="railway"   data-i18n="form.objectType.railway">Железнодорожный транспорт</option>
+                                <option value="marine"    data-i18n="form.objectType.marine">Морские и речные суда</option>
+                                <option value="aircraft"  data-i18n="form.objectType.aircraft">Летательные аппараты</option>
+                                <option value="special"   data-i18n="form.objectType.special">Спецтехника (тракторы, комбайны)</option>
+                            </select>
+                        </div>
+
+                        <!-- ══ ЛЕГКОВЫЕ ════════════════════════════════ -->
+                        <div id="passengerFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.engineRange">Диапазон значений объёма двигателя (куб.см.)</label>
+                                <select id="passengerRange">
+                                    <option value="low"  data-i18n="form.engineRange.low">До 3 000 включительно</option>
+                                    <option value="high" data-i18n="form.engineRange.high">Свыше 3 000</option>
+                                </select>
+                            </div>
+                            <div id="importDateGroup" class="form-group" style="display:none;">
+                                <label data-i18n="form.importDate">Дата ввоза на территорию РК / производства (изготовления или сборки) в РК</label>
+                                <select id="importDate">
+                                    <option value="after"  data-i18n="form.importDate.after">После 31.12.2013 года</option>
+                                    <option value="before" data-i18n="form.importDate.before">До 31.12.2013 года включительно</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="form.engineVolume">Объём двигателя</label>
+                                <input type="number" id="engineVolume" placeholder="Например: 2000" min="1" max="3000">
+                                <small id="engineVolumeHint" data-i18n="form.engineVolume.hint2">Число от 1 до 3 000</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ ГРУЗОВЫЕ ════════════════════════════════ -->
+                        <div id="truckFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.truckRange">Диапазон грузоподъёмности (тонн)</label>
+                                <select id="truckRange">
+                                    <option value="low"  data-i18n="form.truckRange.low2">До 1.5 тонн</option>
+                                    <option value="mid"  data-i18n="form.truckRange.mid">1.5–5 тонн</option>
+                                    <option value="high" data-i18n="form.truckRange.high">Свыше 5 тонн</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="form.truckCapacity">Грузоподъёмность (тонн)</label>
+                                <input type="number" id="truckCapacity" placeholder="Например: 1.0" min="0.1" max="1.5" step="0.1">
+                                <small id="truckCapacityHint" data-i18n="form.truckRange.low2">Тонн: до 1.5</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ АВТОБУСЫ ════════════════════════════════ -->
+                        <div id="busFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.busSeats.label">Количество посадочных мест</label>
+                                <input type="number" id="busSeats" placeholder="Например: 40" min="1" max="200">
+                                <small id="busSeatsHint" data-i18n="form.busSeats.hint">До 12 мест — 9 МРП | 13–25 мест — 14 МРП | свыше 25 — 20 МРП</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ МОТОЦИКЛЫ ═══════════════════════════════ -->
+                        <div id="motorcycleFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.motorcyclePower.label">Мощность двигателя (кВт)</label>
+                                <input type="number" id="motorcyclePower" placeholder="Например: 40" min="1" max="500">
+                                <small id="motorcyclePowerHint" data-i18n="form.motorcyclePower.hint">До 55 кВт — 1 МРП | свыше 55 кВт — 10 МРП</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ ЖЕЛЕЗНОДОРОЖНЫЙ ═════════════════════════ -->
+                        <div id="railwayFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.railwayPower.label">Мощность двигателя (л.с.)</label>
+                                <input type="number" id="railwayPower" placeholder="Например: 3000" min="1">
+                                <small id="railwayPowerHint" data-i18n="form.railwayPower.hint">Ставка: 1% от МРП за каждую л.с.</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ МОРСКИЕ ══════════════════════════════════ -->
+                        <div id="marineFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.marinePower.label">Мощность двигателя (кВт)</label>
+                                <input type="number" id="marinePower" placeholder="Например: 50" min="1">
+                                <small id="marinePowerHint" data-i18n="form.marinePower.hint">До 18.5 кВт — 0.5 МРП/кВт | выше — по шкале от 10 до 60 МРП</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ ЛЕТАТЕЛЬНЫЕ АППАРАТЫ ═══════════════════ -->
+                        <div id="aircraftFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <label data-i18n="form.aircraftMass.label">Максимальная взлётная масса (кг)</label>
+                                <input type="number" id="aircraftMass" placeholder="Например: 5700" min="1">
+                                <small id="aircraftMassHint" data-i18n="form.aircraftMass.hint">Ставка: 4% от МРП за каждый кг массы</small>
+                            </div>
+                        </div>
+
+                        <!-- ══ СПЕЦТЕХНИКА ══════════════════════════════ -->
+                        <div id="specialFields" class="conditional-fields" style="display:none;">
+                            <div class="form-group">
+                                <div class="special-notice">
+                                    <p data-i18n="form.special.notice1">🚜 <strong>Спецтехника, используемая в сельском хозяйстве</strong> — <span style="color:#2ecc71;font-weight:700;">освобождена от налога</span></p>
+                                    <p data-i18n="form.special.notice2">🔧 Прочая спецтехника (не с/х назначения) — ставка <strong>3 МРП</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ── Год выпуска ── -->
+                        <div class="form-group" id="yearManufactGroup">
+                            <label>
+                                <span data-i18n="form.yearManufact.label">Год выпуска транспортного средства</span>
+                                <span class="badge-optional" data-i18n="form.yearManufact.optional">необязательно</span>
+                            </label>
+                            <input type="number" id="yearManufact" placeholder="Например: 2010" min="1900" max="2026">
+                            <small data-i18n="form.yearManufact.hint">С 2026 г.: авто 10–20 лет → коэффициент 0.7 | свыше 20 лет → 0.5</small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary btn-large" data-i18n="form.calculate">Рассчитать</button>
+                            <button type="button" class="btn-secondary btn-large" id="resetBtn" data-i18n="form.reset">Очистить</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ── Результат ── -->
+                <div class="calculator-result" id="resultSection" style="display:none;">
+                    <div class="result-card">
+                        <h3 data-i18n="result.title">Результат расчёта</h3>
+                        <div class="result-main">
+                            <span class="result-label" data-i18n="result.transport.label">Сумма транспортного налога:</span>
+                            <span class="result-value" id="taxAmount">0 ₸</span>
+                        </div>
+                        <div class="result-details" id="resultDetails"></div>
+                        <div class="result-info">
+                            <p data-i18n="result.transport.note"><strong>Обратите внимание:</strong> Расчёт произведён на основе ст. 492 НК РК. Фактическая сумма может отличаться.</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h4 data-i18n="payment.transport.title">Порядок уплаты</h4>
+                        <ul>
+                            <li data-i18n="payment.transport.li1">Налоговый период — календарный год</li>
+                            <li data-i18n="payment.transport.li2">Срок уплаты — до 1 апреля года, следующего за отчётным (физ. лица)</li>
+                            <li data-i18n="payment.transport.li3">Уплачивается по месту регистрации транспортного средства</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Справочник ── -->
+            <div class="tax-info">
+                <h2 data-i18n="info.rates.title">Ставки транспортного налога — ст. 492 НК РК</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h3 data-i18n="info.passenger.title2">Легковые авто (≤ 3 000 см³)</h3>
+                        <table class="rate-table">
+                            <tr><td>до 1 100 см³</td><td>1 МРП</td></tr>
+                            <tr><td>1 101–1 500 см³</td><td>2 МРП + 7 ₸/см³ сверх 1 100</td></tr>
+                            <tr><td>1 501–2 000 см³</td><td>3 МРП + 7 ₸/см³ сверх 1 500</td></tr>
+                            <tr><td>2 001–2 500 см³</td><td>6 МРП + 7 ₸/см³ сверх 2 000</td></tr>
+                            <tr><td>2 501–3 000 см³</td><td>9 МРП + 7 ₸/см³ сверх 2 500</td></tr>
+                        </table>
+                    </div>
+                    <div class="info-item">
+                        <h3 data-i18n="info.passenger.after2013">Легковые авто (&gt; 3 000 см³, после 31.12.2013)</h3>
+                        <table class="rate-table">
+                            <tr><td>3 001–3 200 см³</td><td>35 МРП + 7 ₸/см³ сверх 3 000</td></tr>
+                            <tr><td>3 201–3 500 см³</td><td>46 МРП + 7 ₸/см³ сверх 3 200</td></tr>
+                            <tr><td>3 501–4 000 см³</td><td>66 МРП + 7 ₸/см³ сверх 3 500</td></tr>
+                            <tr><td>4 001–5 000 см³</td><td>130 МРП + 7 ₸/см³ сверх 4 000</td></tr>
+                            <tr><td>свыше 5 000 см³</td><td>200 МРП + 7 ₸/см³ сверх 5 000</td></tr>
+                        </table>
+                    </div>
+                    <div class="info-item">
+                        <h3 data-i18n="info.passenger.before2013">Легковые авто (&gt; 3 000 см³, до 31.12.2013)</h3>
+                        <table class="rate-table">
+                            <tr><td>3 001–4 000 см³</td><td>15 МРП + 7 ₸/см³ сверх 3 000</td></tr>
+                            <tr><td>свыше 4 000 см³</td><td>117 МРП + 7 ₸/см³ сверх 4 000</td></tr>
+                        </table>
+                        <h3 data-i18n="info.truck.title2" style="margin-top:1.2rem;">Грузовые авто</h3>
+                        <table class="rate-table">
+                            <tr><td>до 1.5 т</td><td>3 МРП</td></tr>
+                            <tr><td>1.5–5 т</td><td>5 МРП</td></tr>
+                            <tr><td>5–10 т</td><td>7 МРП</td></tr>
+                            <tr><td>свыше 10 т</td><td>9 МРП</td></tr>
+                        </table>
+                    </div>
+                    <div class="info-item">
+                        <h3 data-i18n="info.bus.title2">Автобусы / Мотоциклы</h3>
+                        <table class="rate-table">
+                            <tr><td>до 12 мест</td><td>9 МРП</td></tr>
+                            <tr><td>13–25 мест</td><td>14 МРП</td></tr>
+                            <tr><td>свыше 25 мест</td><td>20 МРП</td></tr>
+                        </table>
+                        <div style="margin-top:0.8rem;"></div>
+                        <table class="rate-table">
+                            <tr><td>до 55 кВт</td><td>1 МРП</td></tr>
+                            <tr><td>свыше 55 кВт</td><td>10 МРП</td></tr>
+                        </table>
+                        <h3 data-i18n="info.other.title" style="margin-top:1.2rem;">Прочие (2026)</h3>
+                        <table class="rate-table">
+                            <tr><td>ЖД транспорт</td><td>1% МРП × л.с.</td></tr>
+                            <tr><td>Судна ≤ 18.5 кВт</td><td>0.5 МРП × кВт</td></tr>
+                            <tr><td>Летат. аппараты</td><td>4% МРП × кг</td></tr>
+                            <tr><td>Возраст 10–20 лет</td><td>× 0.7 (с 2026)</td></tr>
+                            <tr><td>Возраст &gt; 20 лет</td><td>× 0.5 (с 2026)</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="mrp-info">
+                    <span id="mrpInfoText"><strong>МРП на 2026 год:</strong> 4 325 тенге</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Salyq Calc. <span data-i18n="footer.rights">Все права защищены.</span></p>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/transport.js"></script>
+</body>
+</html>
